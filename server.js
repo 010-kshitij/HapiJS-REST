@@ -1,5 +1,9 @@
 'use strict'
 const Hapi = require('@hapi/hapi');
+const Inert = require('@hapi/inert');
+const Vision = require('@hapi/vision');
+const Pack = require('./package');
+const HapiSwagger = require('hapi-swagger');
 const config = require('./config');
 const routes = require("./routes");
 let mongoose;
@@ -11,6 +15,24 @@ const init = async () => {
 		port: 3000,
 		host: '0.0.0.0'
 	});
+	
+	// Registering the plugins
+	const swaggerOptions = {
+		info: {
+			title: "API Documentation",
+			version: Pack.version,
+		}
+	};
+
+	await server.register([
+		Inert,
+		Vision,
+		{
+			plugin: HapiSwagger,
+			option: swaggerOptions,
+		}
+	]);
+	// End Registering the plugins
 
 	// Including Database connection
 	if(config.database.url.trim() !== "") {

@@ -1,3 +1,4 @@
+'use strict';
 const { create } = require('./user_services');
 
 module.exports = {
